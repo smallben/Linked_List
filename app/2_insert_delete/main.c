@@ -30,8 +30,8 @@ int CreateListnData(TNode **pFirstNode)
 	}
 	//printf ("[Info] Create pointer address is %x, %x\n", *pFirstNode);
 
-	(*pFirstNode)->pNext = (rand() % 100) + 1; 
-	(*pFirstNode)->iData = -1;
+	(*pFirstNode)->pNext = NULL; 
+	(*pFirstNode)->iData = (rand() % 100) + 1;
 
 	//printf ("[Info] The ith data is %d\n", (*pFirstNode)->iData);
 
@@ -185,6 +185,29 @@ int DeleteDatByIndexList(TNode *pFirstNode, int iIndex)
 
 int DeleteDatByDataList(TNode *pFirstNode, int iData)
 {
+	if (!pFirstNode)
+	{
+		printf ("[Error] The first node is empty\n");
+		return S_FAIL;
+	}
+
+	TNode *pList = pFirstNode;
+	TNode *pPrev = NULL;
+
+	while (pList)
+	{
+		if (pList->iData == iData)
+		{
+			pPrev->pNext = pList->pNext;
+			pList->pNext = NULL;
+			free(pList);
+
+			// This is re-assign from the current vlaue
+			pList = pPrev;
+		}
+		pPrev = pList;
+		pList = pList->pNext;
+	}
 
 	return S_OK;
 }
@@ -250,6 +273,23 @@ int main()
 	if (iRet == S_FAIL)
 	{
 		printf ("[Error] Delete data from list by specific index failed\n");
+		return iRet;
+	}
+
+	iRet = DisplayList(pFirstNode);
+	if (iRet == S_FAIL)
+	{
+		printf ("[Error] Display list failed\n");
+		return iRet;
+	}
+
+	printf ("Please Delete One data by specific data (repeated)\n1. Data = ?");
+	scanf("%d", &iData);
+
+	iRet = DeleteDatByDataList(pFirstNode, iData);
+	if (iRet == S_FAIL)
+	{
+		printf ("[Error] Delete the data from list failed\n");
 		return iRet;
 	}
 
