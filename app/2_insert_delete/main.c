@@ -120,7 +120,7 @@ int AppendDataList(TNode *pFirstNode)
 	return S_OK;
 }
 
-int InsertDataList(TNode *pFirstNode, int iData, int index)
+int InsertDataList(TNode **pFirstNode, int iData, int index)
 {
 	if (!pFirstNode)
 	{
@@ -128,7 +128,7 @@ int InsertDataList(TNode *pFirstNode, int iData, int index)
 		return S_FAIL;
 	}
 	TNode *pInsertData = malloc(sizeof (TNode));
-	TNode *pList = pFirstNode;
+	TNode *pList = *pFirstNode;
 	TNode *pPrev = NULL;
 
 	int iCount = 0;
@@ -136,6 +136,7 @@ int InsertDataList(TNode *pFirstNode, int iData, int index)
 	pInsertData->iData = iData;
 
 	printf ("[Info] Replace the %dth value to %d\n", index, iData);
+
 	while (pList)
 	{
 		if (iCount == index)
@@ -148,7 +149,14 @@ int InsertDataList(TNode *pFirstNode, int iData, int index)
 	}
 
 	pInsertData->pNext = pList;
-	pPrev->pNext = pInsertData;
+
+	if (index == 0)
+	{
+		*pFirstNode = pInsertData;
+
+	}
+	else
+		pPrev->pNext = pInsertData;
 
 	return S_OK;
 }
@@ -252,7 +260,7 @@ int main()
 	printf ("\n2. index = ?");
 	scanf("%d", &iIndex);
 
-	iRet = InsertDataList(pFirstNode, iData, iIndex);
+	iRet = InsertDataList(&pFirstNode, iData, iIndex);
 	if (iRet == S_FAIL)
 	{
 		printf ("[Error] Insert data fail\n");
