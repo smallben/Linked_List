@@ -220,6 +220,30 @@ int DeleteDatByDataList(TNode *pFirstNode, int iData)
 	return S_OK;
 }
 
+int FindDataList(TNode *pFirstNode, int iData)
+{
+	if (!pFirstNode)
+	{
+		printf ("[Error] The first node is empty\n");
+		return S_FAIL;
+	}
+
+	TNode *pList = pFirstNode;
+	int iCount = 0;
+
+	while (pList)
+	{
+		if (pList->iData == iData)
+		{
+			printf ("%dth = (%d) Data Matched\n", iCount, iData);
+		}
+		pList = pList->pNext;
+		iCount ++;
+	}
+
+	return S_OK;
+}
+
 void help()
 {
 	printf ("[Info] Please follow the command\n");
@@ -238,6 +262,7 @@ void help()
 	printf ("   --insert Insertion sort\n");
 	printf ("   --select Selection sort\n");*/
 	printf ("8. Display the List\n");
+	printf ("99 Exit the program\n");
 }
 
 int main(int argc, char** argv)
@@ -283,6 +308,12 @@ int main(int argc, char** argv)
 			case 3:
 				printf ("Find the value you want\n?");
 				scanf("%d", &iSearchValue);
+				iRet = FindDataList(pFirstNode, iSearchValue);
+				if (iRet == S_FAIL)
+				{
+					printf ("[Error] Find data list error\n");
+					return iRet;
+				}
 				break;
 			case 4:
 				printf ("Insert Data with specific index\n");
@@ -345,9 +376,12 @@ int main(int argc, char** argv)
 					return iRet;
 				}
 				break;
+			case 99:
+				printf ("Exit the linked list command\n");
+				iTerminated = 1;
+				break;
 			default:
 				help();
-				iTerminated = 1;
 				break;
 		}
 	}
