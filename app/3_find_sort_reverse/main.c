@@ -244,6 +244,75 @@ int FindDataList(TNode *pFirstNode, int iData)
 	return S_OK;
 }
 
+int LinkedListLength(TNode *pFirstNode)
+{
+	if (!pFirstNode)
+	{
+		printf ("[Error] The first node is empty\n");
+		return S_FAIL;
+	}
+
+	int iCount = 0;
+	while (pFirstNode)
+	{
+		pFirstNode = pFirstNode->pNext;
+		iCount++;
+	}
+	printf ("total length = %d\n", iCount);
+	return iCount;
+
+}
+
+void swap (int *pData1, int *pData2)
+{
+	*pData1 ^= *pData2;
+	*pData2 ^= *pData1;
+	*pData1 ^= *pData2;
+}
+
+int BubbleSortList (TNode *pFirstNode)
+{
+	if (!pFirstNode)
+	{
+		printf ("[Error] The first node is empty\n");
+		return S_FAIL;
+	}
+
+	TNode *pList = pFirstNode->pNext;
+	TNode *pPrev = pFirstNode;
+	int DataLength = LinkedListLength(pFirstNode);
+	int iflag = 1;
+	int iCount = 0;
+	int i = 0, j = 0;
+
+	for (i = DataLength - 1; i > 0 ; i--)
+	{
+		if (iflag == 0)
+		{
+			printf ("Sorting is Done with %d times\n", iCount);
+			break;
+		}
+		iflag = 0;
+		iCount ++;
+		pPrev = pFirstNode;
+		pList = pPrev->pNext;
+		for (j = 0; j <= i - 1; j++)
+		{
+			//Compare the two data.
+			if (pPrev->iData > pList->iData)
+			{
+				swap(&(pPrev->iData), &(pList->iData));
+				iflag = 1;
+			}
+			//move to next.
+			pPrev = pList;
+			pList = pList->pNext;
+		}
+	}
+
+	return S_OK;
+}
+
 void help()
 {
 	printf ("[Info] Please follow the command\n");
@@ -367,6 +436,12 @@ int main(int argc, char** argv)
 				break;
 			case 7:
 				printf ("Sorting the Linked list.\n");
+				iRet = BubbleSortList(pFirstNode);
+				if (iRet == S_FAIL)
+				{
+					printf ("[Error] Sorting  the data from list failed\n");
+					return iRet;
+				}
 				break;
 			case 8:
 				iRet = DisplayList(pFirstNode);
