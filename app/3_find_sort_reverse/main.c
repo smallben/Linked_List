@@ -313,6 +313,77 @@ int BubbleSortList (TNode *pFirstNode)
 	return S_OK;
 }
 
+//FIXME: insertion sort is not ready.
+int InsertionSortList (TNode *pFirstNode)
+{
+	if (!pFirstNode)
+	{
+		printf("[Error] The first node is empty\n");
+		return S_FAIL;
+	}
+
+	int i = 0;
+	int iTempIndex = 0;
+	int iDataLenght = LinkedListLength(pFirstNode);
+	TNode *pPrev = pFirstNode;
+	TNode *pList = pFirstNode->pNext;
+
+	for (i = 1; i < iDataLenght; i++)
+	{
+		iTempIndex = i;
+		while (iTempIndex > 0)
+		{
+			if (pPrev->iData > pList->iData)
+			{
+				swap(&(pPrev->iData), &(pList->iData));
+			}
+			pPrev = pList;
+			pList = pList->pNext;
+
+			iTempIndex--;
+		}
+	}
+	return S_OK;
+
+}
+
+int SelectionSortList(TNode *pFirstNode)
+{
+	if (!pFirstNode)
+	{
+		printf ("[Error] The first node is empty\n");
+		return S_FAIL;
+	}
+
+	TNode *pList = NULL;
+	TNode *pFixNode = pFirstNode;
+	TNode *pMinNode = NULL;
+	int iMinData = 0;
+
+
+	while (pFixNode)
+	{
+		iMinData = pFixNode->iData;
+		pList = pFixNode;
+		while (pList)
+		{
+			if (iMinData > pList->iData)
+			{
+				iMinData = pList->iData;
+				pMinNode = pList;
+			}
+			pList = pList->pNext;
+		}
+
+		pMinNode->iData = pFixNode->iData;
+		pFixNode->iData = iMinData;
+
+		pFixNode = pFixNode->pNext;
+	}
+
+	return S_OK;
+}
+
 void help()
 {
 	printf ("[Info] Please follow the command\n");
@@ -345,7 +416,8 @@ int main(int argc, char** argv)
 	int iChoose = 0;
 	int iAppendNum = 0;
 	int iDelete = 0;
-	int iSearchValue = 0 ;
+	int iSearchValue = 0;
+	int iSortOption = 0;
 	// for data creation.
 	srand(0); 
 
@@ -436,11 +508,25 @@ int main(int argc, char** argv)
 				break;
 			case 7:
 				printf ("Sorting the Linked list.\n");
-				iRet = BubbleSortList(pFirstNode);
-				if (iRet == S_FAIL)
+				printf ("1. Bubble Sort\n2. Select Sort\n?");
+				scanf("%d", &iSortOption);
+				if (iSortOption == 1)
 				{
-					printf ("[Error] Sorting  the data from list failed\n");
-					return iRet;
+					iRet = BubbleSortList(pFirstNode);
+					if (iRet == S_FAIL)
+					{
+						printf ("[Error] Sorting  the data from list failed\n");
+						return iRet;
+					}
+				}
+				else if (iSortOption == 2)
+				{
+					iRet = SelectionSortList(pFirstNode);
+					if (iRet == S_FAIL)
+					{
+						printf ("[Error] Sorting  the data from list failed\n");
+						return iRet;
+					}
 				}
 				break;
 			case 8:
