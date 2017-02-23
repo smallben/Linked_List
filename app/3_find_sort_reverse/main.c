@@ -384,6 +384,36 @@ int SelectionSortList(TNode *pFirstNode)
 	return S_OK;
 }
 
+int ReverseList(TNode **ppFirstNode)
+{
+	if (*ppFirstNode == NULL)
+	{
+		printf ("[Error] The first node is not existed\n");
+		return S_FAIL;
+	}
+
+	int iFlag = 1;
+
+	TNode *ptPreNode = (*ppFirstNode);
+	TNode *ptTemp = (*ppFirstNode)->pNext;
+	
+	while (ptTemp != NULL)
+	{
+		(*ppFirstNode) = ptTemp;
+		ptTemp = (*ppFirstNode)->pNext;
+		(*ppFirstNode)->pNext = ptPreNode;
+		if (iFlag == 1)
+		{
+			//Make the first node will pointer to NULL
+			ptPreNode->pNext = NULL;
+			iFlag = 0;
+		}
+		ptPreNode = (*ppFirstNode);
+	}
+
+	return S_OK;
+}
+
 void help()
 {
 	printf ("[Info] Please follow the command\n");
@@ -505,6 +535,7 @@ int main(int argc, char** argv)
 				break;
 			case 6:
 				printf ("Reverse the list\n");
+				ReverseList(&pFirstNode);
 				break;
 			case 7:
 				printf ("Sorting the Linked list.\n");
