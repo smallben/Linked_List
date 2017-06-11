@@ -100,6 +100,8 @@ int CreateRandomTree(TLTree *pTree, int iDepth)
 	printf ("\n");
 	return 0;
 }
+
+//DFS, pre-order
 int DisplayTree (TLTree *pTree)
 {
 	if (pTree == NULL)
@@ -110,7 +112,32 @@ int DisplayTree (TLTree *pTree)
 	printf ("%d ", pTree->iData);
 	DisplayTree(pTree->pLeft);
 	DisplayTree(pTree->pRight);
+}
 
+//In-order
+int DisplayTree_InOrder (TLTree *pTree)
+{
+	if (pTree == NULL)
+	{
+		return 0;
+	}
+
+	DisplayTree_InOrder(pTree->pLeft);
+	printf ("%d ", pTree->iData);
+	DisplayTree_InOrder(pTree->pRight);
+}
+
+//Post-Order
+int DisplayTree_PostOrder (TLTree *pTree)
+{
+	if (pTree == NULL)
+	{
+		return 0;
+	}
+
+	DisplayTree_PostOrder(pTree->pLeft);
+	DisplayTree_PostOrder(pTree->pRight);
+	printf ("%d ", pTree->iData);
 }
 
 int main()
@@ -124,6 +151,15 @@ int main()
 	}
 
 	CreateRandomTree(pTree, DEPTH);
+	printf ("PreOrder: \n");
 	DisplayTree(pTree);
+	printf ("\n");
+	printf ("InOrder: \n");
+	DisplayTree_InOrder (pTree);
+	printf ("\n");
+	printf ("PostOrder: \n");
+	DisplayTree_PostOrder (pTree);
+	printf ("\n");
+
 	return 0;
 }
